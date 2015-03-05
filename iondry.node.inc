@@ -45,6 +45,18 @@ class iondry {
   }
 
 
+  public function s($field) {
+    $type = $this->fieldType($field);
+    switch $type {
+      case 'taxonomy_term_reference':
+        return $this->taxonomyName($field);
+        break;
+      case 'text':
+      default:
+        return $this->get($field);
+    }
+  }
+
   public function get($field) {
     $val = $this->ls($field);
     if(!empty($val[0])) {
