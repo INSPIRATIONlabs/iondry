@@ -17,12 +17,25 @@ class iondry {
   public function taxonomy($field) {
     $v = $this->loadTaxonomies($field, 1);
     if($v[0]) {
-      return $v[0]->name;
+      return $v[0];
     }
     return false;
   }
 
   public function taxonomies($field) {
+    return $this->loadTaxonomies($field);
+  }
+
+
+  public function taxonomyName($field) {
+    $v = $this->loadTaxonomies($field, 1);
+    if($v[0]) {
+      return $v[0]->name;
+    }
+    return false;
+  }
+
+  public function taxonomyNames($field) {
     $r = array();
     $v = $this->loadTaxonomies($field);
     foreach($v as $i) {
@@ -30,6 +43,7 @@ class iondry {
     }
     return $r;
   }
+
 
   public function get($field) {
     $val = $this->ls($field);
@@ -62,7 +76,7 @@ class iondry {
     return $r;
   }
 
-  protected function loadTaxonomies($field, $cnt) {
+  protected function loadTaxonomies($field, $cnt=false) {
     $result = array();
     $res = $this->load($field, $cnt);
     foreach($res as $v) {
