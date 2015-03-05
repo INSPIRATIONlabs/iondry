@@ -34,7 +34,7 @@ class iondry {
    */
   public static function n($n) {
     if(is_object($n) && $n->nid) {
-      $nid = $n;
+      $nid = $n->nid;
     } else {
       $nid = $n;
     }
