@@ -10,7 +10,7 @@ class iondry {
   }
 
   public function fieldType($field) {
-    $v = field_info_field('node', $this->node, $field);
+    $v = field_info_field($field);
     return $v['type'];
   }
 
