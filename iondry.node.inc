@@ -10,7 +10,25 @@ class iondry {
   }
 
   public function fieldType($field) {
+    $v = field_info_field('node', $this->node, $field);
+    return $v['type'];
+  }
 
+  public function taxonomy($field) {
+    $v = $this->loadTaxonomies($field, 1);
+    if($v[0]) {
+      return $v[0]->name;
+    }
+    return false;
+  }
+
+  public function taxonomies($field) {
+    $r = array();
+    $v = $this->loadTaxonomies($field);
+    foreach($v as $i) {
+      $r[] = $i->name;
+    }
+    return $r;
   }
 
   public function get($field) {
@@ -27,6 +45,33 @@ class iondry {
       return $val;
     }
     return array();
+  }
+
+  protected function load($field, $cnt=false) {
+    $val = field_get_items('node', $this->node, $field);
+    $r = array();
+    if(!empty($val[0])) {
+      if(!$cnt) {
+        return $val;
+      } else {
+        for($i=0;$i<$cnt;$i++) {
+          $r[] = $val[$i];
+        }
+      }
+    }
+    return $r;
+  }
+
+  protected function loadTaxonomies($field, $cnt) {
+    $result = array();
+    $res = $this->load($field, $cnt);
+    foreach($res as $v) {
+      if(!empty($v['tid'])) {
+        $t = taxonomy_term_load($v['tid']);
+        $result[] = $t;
+      }
+    }
+    return $result;
   }
 
   /**
