@@ -14,7 +14,7 @@ class iondry {
     return $v['type'];
   }
 
-  public function taxonomy($field) {
+  public function getTaxonomyTerm($field) {
     $v = $this->loadTaxonomies($field, 1);
     if($v[0]) {
       return $v[0];
@@ -22,12 +22,12 @@ class iondry {
     return false;
   }
 
-  public function taxonomies($field) {
+  public function lsTaxonomyTerms($field) {
     return $this->loadTaxonomies($field);
   }
 
 
-  public function taxonomyName($field) {
+  public function getTaxonomyTermName($field) {
     $v = $this->loadTaxonomies($field, 1);
     if($v[0]) {
       return $v[0]->name;
@@ -35,7 +35,7 @@ class iondry {
     return false;
   }
 
-  public function taxonomyNames($field) {
+  public function lsTaxonomyTermNames($field) {
     $r = array();
     $v = $this->loadTaxonomies($field);
     foreach($v as $i) {
@@ -44,14 +44,25 @@ class iondry {
     return $r;
   }
 
+  public function getString($field) {
+    $v = $this->load($field);
+    if($v[0]) {
+      if($v[0]['safe_value']) {
+        return $v[0]['safe_value'];
+      } else {
+        return $v[0]['value'];
+      }
+    }
+  }
+
 
   public function s($field) {
     $type = $this->fieldType($field);
     switch ($type) {
       case 'taxonomy_term_reference':
-        return $this->taxonomyName($field);
-        break;
+        return $this->getTaxonomyTermName($field);
       case 'text':
+        return $this->getString($field);
       default:
         return $this->get($field);
     }
