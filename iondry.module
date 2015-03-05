@@ -14,6 +14,11 @@ function iondry_preprocess_node(&$vars) {
 function iondry_preprocess_field(&$vars) {
   $element = $vars['element'];
 
+  //add .prose to all type text_long/texteditor
+  if(in_array($element['#field_type'], array('text_with_summary','text_long'))) {
+    $vars['classes_array'][] = 'prose';
+  }
+
   //theme hook suggestion based on view mode & type in combination
   $vars['theme_hook_suggestions'][] = 'field__' . $element['#field_name'] . '__' . $element['#bundle'] . '__' . $element['#view_mode'];
 }
