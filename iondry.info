@@ -1,0 +1,4 @@
+name = IONdry
+description = theme helper library for simple access to node attributes and theme processors
+package = INSPIRATIONlabs
+core = 7.x
