@@ -46,7 +46,7 @@ class iondry {
 
   public function getString($field) {
     $v = $this->load($field);
-    if($v[0]) {
+    if(!empty($v) && $v[0]) {
       if($v[0]['safe_value']) {
         return $v[0]['safe_value'];
       } else {
