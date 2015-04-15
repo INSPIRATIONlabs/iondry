@@ -55,7 +55,6 @@ class iondry {
     }
   }
 
-
   public function s($field) {
     $type = $this->fieldType($field);
     switch ($type) {
@@ -74,6 +73,10 @@ class iondry {
       return $val[0];
     }
     return false;
+  }
+
+  public function title() {
+    return $this->node->title;
   }
 
   public function ls($field) {
