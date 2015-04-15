@@ -55,15 +55,25 @@ class iondry {
     }
   }
 
-  public function s($field) {
+  public function s($field, $options=array()) {
     $type = $this->fieldType($field);
     switch ($type) {
       case 'taxonomy_term_reference':
         return $this->getTaxonomyTermName($field);
       case 'text':
         return $this->getString($field);
+      case 'datetime':
+        return $this->formatDate($this->get($field), $options);
       default:
         return $this->get($field);
+    }
+  }
+
+  protected function formatDate($item, $options) {
+    $date = new DateTime($item['value'], new DateTimeZone($item['timezone_db']));
+    $date->setTimezone(new DateTimeZone($item['timezone']));
+    if($options['format']) {
+      return $date->format($options['format']);
     }
   }
 
