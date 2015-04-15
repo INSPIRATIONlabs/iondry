@@ -2,7 +2,7 @@
 
 class iondry {
 
-  private static $instances = array();
+  private static $instances = array() ;
   private $node;
 
   protected function __construct($nid) {
@@ -71,7 +71,7 @@ class iondry {
   public function get($field) {
     $val = $this->ls($field);
     if(!empty($val[0])) {
-      return $val;
+      return $val[0];
     }
     return false;
   }
