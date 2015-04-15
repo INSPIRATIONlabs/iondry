@@ -64,6 +64,8 @@ class iondry {
         return $this->getString($field);
       case 'datetime':
         return $this->formatDate($this->get($field), $options);
+      case 'image':
+        return $this->image($this->get($field), $options);
       default:
         return $this->get($field);
     }
@@ -75,6 +77,14 @@ class iondry {
     if($options['format']) {
       return $date->format($options['format']);
     }
+  }
+
+  protected function image($item, $options) {
+    $arr = array('item' => $item);
+    if($options['image_style']) {
+      $arr['image_style'] = $options['image_style'];
+    }
+    return lazyretina_image_formatter($arr);
   }
 
   public function get($field) {
