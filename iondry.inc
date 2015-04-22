@@ -7,10 +7,14 @@ class iondry {
   }
 
   public static function css_identifiers($input, $prefix = 'cls-') {
+    $result = array();
     if(!is_array($input)) {
       $input = array($input);
     }
-    return array_map(self::str_clean_css_identifier, $input);
+    foreach($input as $str) {
+      $result[] = self::str_clean_css_identifier($str, $prefix);
+    }
+    return $result;
   }
 
   /**
