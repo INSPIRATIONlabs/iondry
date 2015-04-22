@@ -71,8 +71,12 @@ class iondry_node {
     }
   }
 
-  protected function formatDate($item, $options) {
-    $date = new DateTime($item['value'], new DateTimeZone($item['timezone_db']));
+  protected function formatDate($item, $options = array()) {
+    $value = $item['value'];
+    if($options['to'] = true && $item['value2']) {
+      $value = $item['value2'];
+    }
+    $date = new DateTime($value, new DateTimeZone($item['timezone_db']));
     $date->setTimezone(new DateTimeZone($item['timezone']));
     if($options['format']) {
       return $date->format($options['format']);
