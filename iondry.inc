@@ -6,7 +6,7 @@ class iondry {
     return $prefix.strtolower(drupal_clean_css_identifier($string));
   }
 
-  public static function css_identifier($input, $prefix = 'cls-') {
+  public static function css_identifiers($input, $prefix = 'cls-') {
     if(!is_array($input)) {
       $input = array($input);
     }
