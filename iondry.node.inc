@@ -1,6 +1,6 @@
 <?php
 
-class iondry {
+class iondry_node {
 
   private static $instances = array() ;
   private $node;
@@ -137,7 +137,7 @@ class iondry {
   /**
    * Factory method
    */
-  public static function n($n) {
+  public static function instance($n) {
     if(is_object($n) && $n->nid) {
       $nid = $n->nid;
     } else {
