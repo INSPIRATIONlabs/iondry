@@ -44,6 +44,16 @@ class iondry_node {
     return $r;
   }
 
+  public function getNode($field) {
+    $node = $this->get($field);
+    if($node && $node['nid']) {
+      return node_load($node['nid']);
+    }
+    return false;
+  }
+
+
+
   public function getString($field) {
     $v = $this->load($field);
     if(!empty($v) && $v[0]) {
@@ -55,6 +65,9 @@ class iondry_node {
     }
   }
 
+  /**
+   * returns a string representation of the field value
+   */
   public function s($field, $options=array()) {
     $type = $this->fieldType($field);
     switch ($type) {
@@ -144,6 +157,8 @@ class iondry_node {
   public static function instance($n) {
     if(is_object($n) && $n->nid) {
       $nid = $n->nid;
+    } elseif(is_array($n) && !empty($n['nid'])) {
+      $nid = $n['nid'];
     } else {
       $nid = $n;
     }
