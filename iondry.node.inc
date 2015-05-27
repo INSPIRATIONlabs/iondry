@@ -80,11 +80,13 @@ class iondry {
   }
 
   protected function image($item, $options) {
-    $arr = array('item' => $item);
-    if($options['image_style']) {
-      $arr['image_style'] = $options['image_style'];
+    if($item) {
+      $arr = array('item' => $item);
+      if($options['image_style']) {
+        $arr['image_style'] = $options['image_style'];
+      }
+      return lazyretina_image_formatter($arr);
     }
-    return lazyretina_image_formatter($arr);
   }
 
   public function get($field) {
