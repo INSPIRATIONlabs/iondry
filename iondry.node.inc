@@ -1,6 +1,6 @@
 <?php
 
-class iondry {
+class iondry_node {
 
   private static $instances = array() ;
   private $node;
@@ -44,6 +44,16 @@ class iondry {
     return $r;
   }
 
+  public function getNode($field) {
+    $node = $this->get($field);
+    if($node && $node['nid']) {
+      return node_load($node['nid']);
+    }
+    return false;
+  }
+
+
+
   public function getString($field) {
     $v = $this->load($field);
     if(!empty($v) && $v[0]) {
@@ -55,6 +65,9 @@ class iondry {
     }
   }
 
+  /**
+   * returns a string representation of the field value
+   */
   public function s($field, $options=array()) {
     $type = $this->fieldType($field);
     switch ($type) {
@@ -71,8 +84,12 @@ class iondry {
     }
   }
 
-  protected function formatDate($item, $options) {
-    $date = new DateTime($item['value'], new DateTimeZone($item['timezone_db']));
+  protected function formatDate($item, $options = array()) {
+    $value = $item['value'];
+    if($options['to'] == true && $item['value2']) {
+      $value = $item['value2'];
+    }
+    $date = new DateTime($value, new DateTimeZone($item['timezone_db']));
     $date->setTimezone(new DateTimeZone($item['timezone']));
     if($options['format']) {
       return $date->format($options['format']);
@@ -139,9 +156,11 @@ class iondry {
   /**
    * Factory method
    */
-  public static function n($n) {
+  public static function instance($n) {
     if(is_object($n) && $n->nid) {
       $nid = $n->nid;
+    } elseif(is_array($n) && !empty($n['nid'])) {
+      $nid = $n['nid'];
     } else {
       $nid = $n;
     }

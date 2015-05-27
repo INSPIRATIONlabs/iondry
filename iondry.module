@@ -1,12 +1,13 @@
 <?php
 
 require_once 'iondry.node.inc';
+require_once 'iondry.inc';
 
 
 
 function iondry_preprocess_node(&$vars) {
   $node = $vars['node'];
-  
+
   $vars['attributes_array']['id'] = 'node-'.$node->nid;
 
   //theme hook suggestion based on view mode & type in combination
