@@ -71,6 +71,9 @@ class iondry_node {
   public function s($field, $options=array()) {
     $type = $this->fieldType($field);
     switch ($type) {
+      case 'text_long':
+        $out = field_view_value('node', $this->node, $field, $this->get($field));
+        return render($out);
       case 'taxonomy_term_reference':
         return $this->getTaxonomyTermName($field);
       case 'text':
