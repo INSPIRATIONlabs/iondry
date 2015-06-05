@@ -89,13 +89,15 @@ class iondry_node {
 
   protected function formatDate($item, $options = array()) {
     $value = $item['value'];
-    if($options['to'] == true && $item['value2']) {
-      $value = $item['value2'];
-    }
-    $date = new DateTime($value, new DateTimeZone($item['timezone_db']));
-    $date->setTimezone(new DateTimeZone($item['timezone']));
-    if($options['format']) {
-      return format_date($date->getTimestamp(), 'custom', $options['format'], $item['timezone'], $options['lang']);
+    if($value) {
+      if($options['to'] == true && $item['value2']) {
+        $value = $item['value2'];
+      }
+      $date = new DateTime($value, new DateTimeZone($item['timezone_db']));
+      $date->setTimezone(new DateTimeZone($item['timezone']));
+      if($options['format']) {
+        return format_date($date->getTimestamp(), 'custom', $options['format'], $item['timezone'], $options['lang']);
+      }      
     }
   }
 
