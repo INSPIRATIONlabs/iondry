@@ -95,7 +95,7 @@ class iondry_node {
     $date = new DateTime($value, new DateTimeZone($item['timezone_db']));
     $date->setTimezone(new DateTimeZone($item['timezone']));
     if($options['format']) {
-      return $date->format($options['format']);
+      return format_date($date->getTimestamp(), 'custom', $options['format'], $item['timezone'], $options['lang']);
     }
   }
 
