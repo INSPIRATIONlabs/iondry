@@ -108,7 +108,7 @@ class iondry_node {
         $arr['image_style'] = $options['image_style'];
       }
       if($options['attributes']) {
-        $arr['attributes'] = $options['attributes'];
+        $arr['item']['attributes'] = $options['attributes'];
       }
       return lazyretina_image_formatter($arr);
     }
