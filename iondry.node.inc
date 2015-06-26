@@ -97,7 +97,7 @@ class iondry_node {
       $date->setTimezone(new DateTimeZone($item['timezone']));
       if($options['format']) {
         return format_date($date->getTimestamp(), 'custom', $options['format'], $item['timezone'], $options['lang']);
-      }      
+      }
     }
   }
 
@@ -107,7 +107,7 @@ class iondry_node {
       if($options['image_style']) {
         $arr['image_style'] = $options['image_style'];
       }
-      return lazyretina_image_formatter($arr);
+      return lazyretina_image_formatter($arr, $options);
     }
   }
 
