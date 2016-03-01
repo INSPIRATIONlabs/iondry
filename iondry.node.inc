@@ -123,6 +123,10 @@ class iondry_node {
     return $this->node->title;
   }
 
+  public function url() {
+    return url('node/'. $this->node->nid);
+  }
+
   public function ls($field) {
     $val = field_get_items('node', $this->node, $field);
     if(!empty($val[0])) {
