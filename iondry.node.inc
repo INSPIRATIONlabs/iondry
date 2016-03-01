@@ -72,6 +72,7 @@ class iondry_node {
     $type = $this->fieldType($field);
     switch ($type) {
       case 'text_long':
+      case 'text_with_summary':
         $out = field_view_value('node', $this->node, $field, $this->get($field));
         return render($out);
       case 'taxonomy_term_reference':
