@@ -79,6 +79,7 @@ class iondry_node {
       case 'text':
         return $this->getString($field);
       case 'datetime':
+      case 'date':
         return $this->formatDate($this->get($field), $options);
       case 'image':
         return $this->image($this->get($field), $options);
