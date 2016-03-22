@@ -52,10 +52,6 @@ class iondry_node {
     return false;
   }
 
-  public function url() {
-    return url('node/'. $this->node->nid);
-  }
-
   public function getString($field) {
     $v = $this->load($field);
     if(!empty($v) && $v[0]) {
