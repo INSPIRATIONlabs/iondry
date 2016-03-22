@@ -52,7 +52,9 @@ class iondry_node {
     return false;
   }
 
-
+  public function url() {
+    return url('node/'. $this->node->nid);
+  }
 
   public function getString($field) {
     $v = $this->load($field);
@@ -108,6 +110,9 @@ class iondry_node {
       $arr = array('item' => $item);
       if($options['image_style']) {
         $arr['image_style'] = $options['image_style'];
+      }
+      if($options['class']) {
+        $arr['image']['class'] = $options['class'];
       }
       return lazyretina_image_formatter($arr);
     }
