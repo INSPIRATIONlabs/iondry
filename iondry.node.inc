@@ -126,6 +126,10 @@ class iondry_node {
     return $this->node->title;
   }
 
+  public function nid() {
+    return $this->node->nid;
+  }
+
   public function url() {
     return url('node/'. $this->node->nid);
   }
