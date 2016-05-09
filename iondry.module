@@ -27,3 +27,23 @@ function iondry_preprocess_field(&$vars) {
   //theme hook suggestion based on view mode & type in combination
   $vars['theme_hook_suggestions'][] = 'field__' . $element['#field_name'] . '__' . $element['#bundle'] . '__' . $element['#view_mode'];
 }
+
+
+function _iondry_render_block_content($module, $delta) {
+  $block = block_load($module,$delta);
+  $renderable_block=  _block_get_renderable_array(_block_render_blocks(array($block)));
+  return drupal_render($renderable_block);
+  //old version:
+  $output = '';
+  if ($block = block_load($module, $delta)) {
+    if ($build = module_invoke($module, 'block_view', $delta)) {
+      $delta = str_replace('-', '_', $delta);
+      drupal_alter(array('block_view', "block_view_{$module}_{$delta}"), $build, $block);
+
+      if (!empty($build['content'])) {
+        return is_array($build['content']) ? render($build['content']) : $build['content'];
+      }
+    }
+  }
+  return $output;
+}
