@@ -6,7 +6,7 @@ class iondry_file {
   private $file;
 
   protected function __construct($fid) {
-    $this->file = node_load($fid);
+    $this->file = file_load($fid);
   }
 
   public function fieldType($field) {
