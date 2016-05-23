@@ -24,4 +24,11 @@ class iondry {
     return iondry_node::instance($n);
   }
 
+  /**
+   * Factory method
+   */
+  public static function f($n) {
+    return iondry_file::instance($n);
+  }
+
 }
