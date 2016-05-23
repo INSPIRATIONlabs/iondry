@@ -85,7 +85,7 @@ class iondry_file {
     switch ($type) {
       case 'text_long':
       case 'text_with_summary':
-        $out = field_view_value('node', $this->file, $field, $this->get($field));
+        $out = field_view_value('file', $this->file, $field, $this->get($field));
         return render($out);
       case 'taxonomy_term_reference':
         return $this->getTaxonomyTermName($field);
