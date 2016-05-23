@@ -44,6 +44,20 @@ class iondry_node {
     return $r;
   }
 
+  public function lsNodes($field) {
+    $r = array();
+    $val = field_get_items('node', $this->node, $field);
+    if(!empty($val[0])) {
+      foreach($val as $item) {
+        if(!empty($item['nid'])) {
+          $r[] = iondry_node::instance($item['nid']);
+        }
+      }
+      return $r;
+    }
+    return false;
+  }
+
   public function getNode($field) {
     $node = $this->get($field);
     if($node && $node['nid']) {
