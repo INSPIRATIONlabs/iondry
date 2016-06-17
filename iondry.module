@@ -1,5 +1,6 @@
 <?php
 
+require_once 'iondry.block.inc';
 require_once 'iondry.node.inc';
 require_once 'iondry.file.inc';
 require_once 'iondry.inc';
