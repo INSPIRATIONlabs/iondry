@@ -5,8 +5,8 @@ class iondry_node {
   private static $instances = array() ;
   private $node;
 
-  protected function __construct($nid) {
-    $this->node = node_load($nid);
+  protected function __construct($nid, $vid = null) {
+    $this->node = node_load($nid, $vid);
   }
 
   public function fieldType($field) {
@@ -187,17 +187,18 @@ class iondry_node {
    * Factory method
    */
   public static function instance($n) {
+    $vid = null;
     if(is_object($n) && $n->nid) {
       $nid = $n->nid;
+      if($n->vid) {
+        $vid = $n->vid;
+      }
     } elseif(is_array($n) && !empty($n['nid'])) {
       $nid = $n['nid'];
     } else {
       $nid = $n;
     }
-    if(!isset(self::$instances[$nid])) {
-      self::$instances[$nid] = new self($nid);
-    }
-    return self::$instances[$nid];
+    return new self($nid, $vid);
   }
 
 }
