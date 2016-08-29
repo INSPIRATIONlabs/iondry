@@ -48,7 +48,7 @@ class iondry_node {
     $r = array();
     $v = $this->loadTaxonomies($field);
     foreach($v as $i) {
-      $r[] = $i->tid;
+      $r[] = (int)$i->tid;
     }
     return $r;
   }
