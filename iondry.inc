@@ -31,4 +31,7 @@ class iondry {
     return iondry_file::instance($n);
   }
 
+  public static function v($n) {
+    return iondry_view::instance();
+  }
 }
