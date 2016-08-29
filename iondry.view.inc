@@ -5,7 +5,7 @@ class iondry_view {
   /**
    * Loads nodes from a view
    */
-  public function load_nodes($view, $display=false, $args=false) {
+  public function load_nodes($view, $display=false, $args=false, $options = array()) {
     $result = array();
     $view = views_get_view($view);
     if($view) {
@@ -14,6 +14,9 @@ class iondry_view {
       }
       if($display) {
         $view->set_display($display);
+      }
+      if($options && $options['limit']) {
+        $view->set_items_per_page($options['limit']);
       }
       $view->execute();
       if(!empty($view->result) && $view->result[0]) {
