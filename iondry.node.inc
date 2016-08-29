@@ -44,6 +44,15 @@ class iondry_node {
     return $r;
   }
 
+  public function lsTaxonomyTermIDs($field) {
+    $r = array();
+    $v = $this->loadTaxonomies($field);
+    foreach($v as $i) {
+      $r[] = $i->tid;
+    }
+    return $r;
+  }
+
   public function lsNodes($field) {
     $r = array();
     $val = field_get_items('node', $this->node, $field);
