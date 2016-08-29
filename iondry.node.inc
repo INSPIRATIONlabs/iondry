@@ -99,6 +99,7 @@ class iondry_node {
       case 'taxonomy_term_reference':
         return $this->getTaxonomyTermName($field);
       case 'text':
+      case 'list_text':
         return $this->getString($field);
       case 'datetime':
       case 'date':
