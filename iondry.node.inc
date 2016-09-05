@@ -160,6 +160,10 @@ class iondry_node {
     return $this->node->nid;
   }
 
+  public function node() {
+    return $this->node;
+  }
+
   public function type() {
     return $this->node->type;
   }
