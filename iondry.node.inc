@@ -70,7 +70,7 @@ class iondry_node {
   public function getNode($field) {
     $node = $this->get($field);
     if($node && $node['nid']) {
-      return node_load($node['nid']);
+      return iondry_node::instance($node['nid']);
     }
     return false;
   }
