@@ -8,8 +8,6 @@ class iondry_node {
   protected function __construct($nid, $vid = null) {
     if($nid) {
       $this->node = node_load($nid, $vid);
-    } else {
-      $this->node = new stdClass();
     }
   }
 
@@ -58,15 +56,17 @@ class iondry_node {
   }
 
   public function lsNodes($field) {
-    $r = array();
-    $val = field_get_items('node', $this->node, $field);
-    if(!empty($val[0])) {
-      foreach($val as $item) {
-        if(!empty($item['nid'])) {
-          $r[] = iondry_node::instance($item['nid']);
+    if($this->node) {
+      $r = array();
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        foreach($val as $item) {
+          if(!empty($item['nid'])) {
+            $r[] = iondry_node::instance($item['nid']);
+          }
         }
+        return $r;
       }
-      return $r;
     }
     return false;
   }
@@ -94,25 +94,28 @@ class iondry_node {
    * returns a string representation of the field value
    */
   public function s($field, $options=array()) {
-    $type = $this->fieldType($field);
-    switch ($type) {
-      case 'text_long':
-      case 'text_with_summary':
-        $out = field_view_value('node', $this->node, $field, $this->get($field));
-        return render($out);
-      case 'taxonomy_term_reference':
-        return $this->getTaxonomyTermName($field);
-      case 'text':
-      case 'list_text':
-        return $this->getString($field);
-      case 'datetime':
-      case 'date':
-        return $this->formatDate($this->get($field), $options);
-      case 'image':
-        return $this->image($this->get($field), $options);
-      default:
-        return $this->get($field);
+    if($this->node) {
+      $type = $this->fieldType($field);
+      switch ($type) {
+        case 'text_long':
+        case 'text_with_summary':
+          $out = field_view_value('node', $this->node, $field, $this->get($field));
+          return render($out);
+        case 'taxonomy_term_reference':
+          return $this->getTaxonomyTermName($field);
+        case 'text':
+        case 'list_text':
+          return $this->getString($field);
+        case 'datetime':
+        case 'date':
+          return $this->formatDate($this->get($field), $options);
+        case 'image':
+          return $this->image($this->get($field), $options);
+        default:
+          return $this->get($field);
+      }
     }
+    return false;
   }
 
   protected function formatDate($item, $options = array()) {
@@ -157,42 +160,56 @@ class iondry_node {
   }
 
   public function title() {
-    return $this->node->title;
+    if($this->node) {
+      return $this->node->title;
+    }
   }
 
   public function nid() {
-    return $this->node->nid;
+    if($this->node) {
+      return $this->node->nid;
+    }
   }
 
   public function node() {
-    return $this->node;
+    if($this->node) {
+      return $this->node;
+    }
   }
 
   public function type() {
-    return $this->node->type;
+    if($this->node) {
+      return $this->node->type;
+    }
   }
 
   public function url() {
-    return url('node/'. $this->node->nid);
+    if($this->node) {
+      return url('node/'. $this->node->nid);
+    }
   }
 
   public function ls($field) {
-    $val = field_get_items('node', $this->node, $field);
-    if(!empty($val[0])) {
-      return $val;
+    if($this->node) {
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        return $val;
+      }
     }
     return array();
   }
 
   protected function load($field, $cnt=false) {
-    $val = field_get_items('node', $this->node, $field);
     $r = array();
-    if(!empty($val[0])) {
-      if(!$cnt) {
-        return $val;
-      } else {
-        for($i=0;$i<$cnt;$i++) {
-          $r[] = $val[$i];
+    if($this->node) {
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        if(!$cnt) {
+          return $val;
+        } else {
+          for($i=0;$i<$cnt;$i++) {
+            $r[] = $val[$i];
+          }
         }
       }
     }
