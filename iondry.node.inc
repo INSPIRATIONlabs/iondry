@@ -6,7 +6,11 @@ class iondry_node {
   private $node;
 
   protected function __construct($nid, $vid = null) {
-    $this->node = node_load($nid, $vid);
+    if($nid) {
+      $this->node = node_load($nid, $vid);
+    } else {
+      $this->node = new stdClass();
+    }
   }
 
   public function fieldType($field) {
