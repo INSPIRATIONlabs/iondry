@@ -61,7 +61,7 @@ class iondry_node {
       $val = field_get_items('node', $this->node, $field);
       if(!empty($val[0])) {
         foreach($val as $item) {
-          if(!empty($item['nid']) && ($n = node_load($node['nid']))) {
+          if(!empty($item['nid']) && ($n = node_load($item['nid']))) {
             $r[] = iondry_node::instance($n);
           }
         }
