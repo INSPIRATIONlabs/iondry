@@ -5,8 +5,10 @@ class iondry_node {
   private static $instances = array() ;
   private $node;
 
-  protected function __construct($nid, $vid = null) {
-    if($nid) {
+  protected function __construct($n, $vid = null) {
+    if(is_object($n) && $n->nid) {
+      $this->node = $n;
+    } else {
       $this->node = node_load($nid, $vid);
     }
   }
@@ -58,12 +60,17 @@ class iondry_node {
   public function lsNodes($field) {
     if($this->node) {
       $r = array();
+      $nids = array();
       $val = field_get_items('node', $this->node, $field);
       if(!empty($val[0])) {
         foreach($val as $item) {
-          if(!empty($item['nid']) && ($n = node_load($item['nid']))) {
-            $r[] = iondry_node::instance($n);
+          if(!empty($item['nid'])) {
+            $nids[] = $item['nid'];
           }
+        }
+        $items = node_load_multiple($nids);
+        foreach($items as $item) {
+          $r[] = iondry_node::instance($item);
         }
         return $r;
       }
@@ -231,14 +238,11 @@ class iondry_node {
   /**
    * Factory method
    */
-  public static function instance($n) {
-    $vid = null;
+  public static function instance($n, $vid = null) {
     if(is_object($n) && $n->nid) {
-      $nid = $n->nid;
-      if($n->vid) {
-        $vid = $n->vid;
-      }
-    } elseif(is_array($n) && !empty($n['nid'])) {
+      return new self($n);
+    }
+    if(is_array($n) && !empty($n['nid'])) {
       $nid = $n['nid'];
     } else {
       $nid = $n;
