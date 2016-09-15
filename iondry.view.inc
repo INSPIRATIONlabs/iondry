@@ -19,11 +19,18 @@ class iondry_view {
         $view->set_items_per_page($options['limit']);
       }
       $view->execute();
+      $nids = [];
       if(!empty($view->result) && $view->result[0]) {
         foreach($view->result as $item) {
           if(!empty($item->nid)) {
-            $result[] = iondry::n($item->nid);
+            $nids[] = $item->nid;
           }
+        }
+      }
+      if(count($nids)) {
+        $res = node_load_multiple($nids);
+        foreach($res as $item) {
+          $result[] = iondry::n($item);
         }
       }
       return $result;
