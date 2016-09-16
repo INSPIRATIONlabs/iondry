@@ -2,11 +2,24 @@
 
 class iondry_view {
 
+
   /**
    * Loads nodes from a view
    */
   public function load_nodes($view, $display=false, $args=false, $options = array()) {
     $result = array();
+    $nids = $this->load_nodeIds($view, $display, $args, $options);
+    if(count($nids)) {
+      $res = node_load_multiple($nids);
+      foreach($res as $item) {
+        $result[] = iondry::n($item);
+      }
+    }
+    return $result;
+  }
+
+  public function load_nodeIds($view, $display=false, $args=false, $options = array()) {
+    $nids = array();
     $view = views_get_view($view);
     if($view) {
       if($args) {
@@ -19,7 +32,6 @@ class iondry_view {
         $view->set_items_per_page($options['limit']);
       }
       $view->execute();
-      $nids = [];
       if(!empty($view->result) && $view->result[0]) {
         foreach($view->result as $item) {
           if(!empty($item->nid)) {
@@ -27,14 +39,8 @@ class iondry_view {
           }
         }
       }
-      if(count($nids)) {
-        $res = node_load_multiple($nids);
-        foreach($res as $item) {
-          $result[] = iondry::n($item);
-        }
-      }
-      return $result;
     }
+    return $nids;
   }
 
   /**
