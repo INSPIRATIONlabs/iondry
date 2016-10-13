@@ -144,6 +144,10 @@ class iondry_node {
     return $this->node->nid;
   }
 
+  public function tnid() {
+    return $this->node->tnid;
+  }
+
   public function url() {
     return url('node/'. $this->node->nid);
   }
