@@ -194,6 +194,10 @@ class iondry_node {
     }
   }
 
+  public function tnid() {
+    return $this->node->tnid;
+  }
+
   public function node() {
     if($this->node) {
       return $this->node;
@@ -204,10 +208,6 @@ class iondry_node {
     if($this->node) {
       return $this->node->type;
     }
-  }
-
-  public function tnid() {
-    return $this->node->tnid;
   }
 
   public function url() {
