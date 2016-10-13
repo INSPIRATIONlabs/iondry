@@ -5,8 +5,12 @@ class iondry_node {
   private static $instances = array() ;
   private $node;
 
-  protected function __construct($nid) {
-    $this->node = node_load($nid);
+  protected function __construct($n, $vid = null) {
+    if(is_object($n) && $n->nid) {
+      $this->node = $n;
+    } else {
+      $this->node = node_load($nid, $vid);
+    }
   }
 
   public function fieldType($field) {
@@ -44,13 +48,24 @@ class iondry_node {
     return $r;
   }
 
-  public function lsNodes($field) {
+  public function lsTaxonomyTermIDs($field) {
     $r = array();
-    $val = field_get_items('node', $this->node, $field);
-    if(!empty($val[0])) {
-      foreach($val as $item) {
-        if(!empty($item['nid'])) {
-          $r[] = iondry_node::instance($item['nid']);
+    $v = $this->loadTaxonomies($field);
+    foreach($v as $i) {
+      $r[] = (int)$i->tid;
+    }
+    return $r;
+  }
+
+  public function lsNodeIds($field) {
+    if($this->node) {
+      $r = array();
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        foreach($val as $item) {
+          if(!empty($item['nid'])) {
+            $r[] = $item['nid'];
+          }
         }
       }
       return $r;
@@ -58,10 +73,31 @@ class iondry_node {
     return false;
   }
 
+  public function lsNodes($field) {
+    if($this->node) {
+      $r = array();
+      $nids = array();
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        foreach($val as $item) {
+          if(!empty($item['nid'])) {
+            $nids[] = $item['nid'];
+          }
+        }
+        $items = node_load_multiple($nids);
+        foreach($items as $item) {
+          $r[] = iondry_node::instance($item);
+        }
+        return $r;
+      }
+    }
+    return false;
+  }
+
   public function getNode($field) {
     $node = $this->get($field);
-    if($node && $node['nid']) {
-      return node_load($node['nid']);
+    if($node && $node['nid'] && ($n = node_load($node['nid']))) {
+      return iondry_node::instance($n);
     }
     return false;
   }
@@ -81,24 +117,28 @@ class iondry_node {
    * returns a string representation of the field value
    */
   public function s($field, $options=array()) {
-    $type = $this->fieldType($field);
-    switch ($type) {
-      case 'text_long':
-      case 'text_with_summary':
-        $out = field_view_value('node', $this->node, $field, $this->get($field));
-        return render($out);
-      case 'taxonomy_term_reference':
-        return $this->getTaxonomyTermName($field);
-      case 'text':
-        return $this->getString($field);
-      case 'datetime':
-      case 'date':
-        return $this->formatDate($this->get($field), $options);
-      case 'image':
-        return $this->image($this->get($field), $options);
-      default:
-        return $this->get($field);
+    if($this->node) {
+      $type = $this->fieldType($field);
+      switch ($type) {
+        case 'text_long':
+        case 'text_with_summary':
+          $out = field_view_value('node', $this->node, $field, $this->get($field));
+          return render($out);
+        case 'taxonomy_term_reference':
+          return $this->getTaxonomyTermName($field);
+        case 'text':
+        case 'list_text':
+          return $this->getString($field);
+        case 'datetime':
+        case 'date':
+          return $this->formatDate($this->get($field), $options);
+        case 'image':
+          return $this->image($this->get($field), $options);
+        default:
+          return $this->get($field);
+      }
     }
+    return false;
   }
 
   protected function formatDate($item, $options = array()) {
@@ -121,8 +161,14 @@ class iondry_node {
       if($options['image_style']) {
         $arr['image_style'] = $options['image_style'];
       }
+      if($options['attributes']) {
+        $arr['item']['attributes'] = $options['attributes'];
+      }
       if($options['class']) {
-        $arr['image']['class'] = $options['class'];
+        if(empty($arr['item']['attributes'])) {
+          $arr['item']['attributes'] = array('class' => array());
+          $arr['item']['attributes']['class'][] = $options['class'];
+        }
       }
       return lazyretina_image_formatter($arr);
     }
@@ -137,11 +183,27 @@ class iondry_node {
   }
 
   public function title() {
-    return $this->node->title;
+    if($this->node) {
+      return $this->node->title;
+    }
   }
 
   public function nid() {
-    return $this->node->nid;
+    if($this->node) {
+      return $this->node->nid;
+    }
+  }
+
+  public function node() {
+    if($this->node) {
+      return $this->node;
+    }
+  }
+
+  public function type() {
+    if($this->node) {
+      return $this->node->type;
+    }
   }
 
   public function tnid() {
@@ -149,26 +211,32 @@ class iondry_node {
   }
 
   public function url() {
-    return url('node/'. $this->node->nid);
+    if($this->node) {
+      return url('node/'. $this->node->nid);
+    }
   }
 
   public function ls($field) {
-    $val = field_get_items('node', $this->node, $field);
-    if(!empty($val[0])) {
-      return $val;
+    if($this->node) {
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        return $val;
+      }
     }
     return array();
   }
 
   protected function load($field, $cnt=false) {
-    $val = field_get_items('node', $this->node, $field);
     $r = array();
-    if(!empty($val[0])) {
-      if(!$cnt) {
-        return $val;
-      } else {
-        for($i=0;$i<$cnt;$i++) {
-          $r[] = $val[$i];
+    if($this->node) {
+      $val = field_get_items('node', $this->node, $field);
+      if(!empty($val[0])) {
+        if(!$cnt) {
+          return $val;
+        } else {
+          for($i=0;$i<$cnt;$i++) {
+            $r[] = $val[$i];
+          }
         }
       }
     }
@@ -190,18 +258,16 @@ class iondry_node {
   /**
    * Factory method
    */
-  public static function instance($n) {
+  public static function instance($n, $vid = null) {
     if(is_object($n) && $n->nid) {
-      $nid = $n->nid;
-    } elseif(is_array($n) && !empty($n['nid'])) {
+      return new self($n);
+    }
+    if(is_array($n) && !empty($n['nid'])) {
       $nid = $n['nid'];
     } else {
       $nid = $n;
     }
-    if(!isset(self::$instances[$nid])) {
-      self::$instances[$nid] = new self($nid);
-    }
-    return self::$instances[$nid];
+    return new self($nid, $vid);
   }
 
 }
