@@ -43,6 +43,31 @@ class iondry_view {
     return $nids;
   }
 
+  public function load_termIds($view, $display=false, $args=false, $options = array()) {
+    $tids = array();
+    $view = views_get_view($view);
+    if($view) {
+      if($args) {
+        $view->set_arguments($args);
+      }
+      if($display) {
+        $view->set_display($display);
+      }
+      if($options && $options['limit']) {
+        $view->set_items_per_page($options['limit']);
+      }
+      $view->execute();
+      if(!empty($view->result) && $view->result[0]) {
+        foreach($view->result as $item) {
+          if(!empty($item->tid)) {
+            $tids[] = $item->tid;
+          }
+        }
+      }
+    }
+    return $tids;
+  }
+
   /**
    * Factory method
    */
