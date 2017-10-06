@@ -36,6 +36,8 @@ class iondry_view {
         foreach($view->result as $item) {
           if(!empty($item->nid)) {
             $nids[] = $item->nid;
+          } elseif(!empty($item->entity)) {
+            $nids[] = $item->entity;
           }
         }
       }
