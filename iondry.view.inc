@@ -38,6 +38,8 @@ class iondry_view {
             $nids[] = $item->nid;
           } elseif(!empty($item->entity)) {
             $nids[] = $item->entity;
+          } else {
+            return $nids;
           }
         }
       }
