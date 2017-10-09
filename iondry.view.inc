@@ -36,10 +36,8 @@ class iondry_view {
         foreach($view->result as $item) {
           if(!empty($item->nid)) {
             $nids[] = $item->nid;
-          } elseif(!empty($item->entity)) {
+          } elseif(!empty($item->entity)) { // View of type search index returns different structured objects
             $nids[] = $item->entity;
-          } else {
-            return $nids;
           }
         }
       }
