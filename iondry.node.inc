@@ -249,6 +249,9 @@ class iondry_node {
     foreach($res as $v) {
       if(!empty($v['tid'])) {
         $t = taxonomy_term_load($v['tid']);
+        if(module_exists('i18n_taxonomy')) {
+          $t = i18n_taxonomy_localize_terms($t);
+        }
         $result[] = $t;
       }
     }
