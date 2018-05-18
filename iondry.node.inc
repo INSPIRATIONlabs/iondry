@@ -114,7 +114,7 @@ class iondry_node {
   }
 
   /**
-   * returns a string representation of the field value
+   * returns a string representation of the field value of several fieldtypes
    */
   public function s($field, $options=array()) {
     if($this->node) {
