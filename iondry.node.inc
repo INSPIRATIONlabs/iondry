@@ -9,7 +9,7 @@ class iondry_node {
     if(is_object($n) && $n->nid) {
       $this->node = $n;
     } else {
-      $this->node = node_load($nid, $vid);
+      $this->node = node_load($n, $vid);
     }
   }
 
