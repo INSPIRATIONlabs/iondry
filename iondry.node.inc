@@ -2,7 +2,6 @@
 
 class iondry_node {
 
-  private static $instances = array() ;
   private $node;
 
   protected function __construct($n, $vid = null) {
