@@ -2,6 +2,7 @@
 
 require_once 'iondry.block.inc';
 require_once 'iondry.node.inc';
+require_once 'iondry.term.inc';
 require_once 'iondry.file.inc';
 require_once 'iondry.view.inc';
 require_once 'iondry.inc';
